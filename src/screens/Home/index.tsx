@@ -1,5 +1,7 @@
 import React, {useState, useLayoutEffect} from 'react';
 
+import {TextInputMask} from 'react-native-masked-text';
+
 import {
   Form,
   Item,
@@ -42,7 +44,6 @@ const Home = ({navigation}) => {
   const [displayGrid, setDisplayGrid] = useState(true);
 
   const buttonName = displayGrid ? 'md-grid' : 'md-list';
-  console.log('displayGrid', displayGrid);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -73,13 +74,15 @@ const Home = ({navigation}) => {
     {label: 'Litrao 1000ml', value: 1000, image: volume1000},
   ];
 
-  const calculator = ({
-    beerPrice,
-    beerNumerator,
-    beerDenominator,
-  }: calculatorProps) => {
-    const result = (beerPrice * beerDenominator) / beerNumerator;
-    return String(result);
+  const calculator = (
+    beerPrice: string,
+    beerInput: number,
+    beerCompared: number,
+  ): string => {
+    const sanitizedPrice = parseFloat(beerPrice.replace(/\D/g, ''));
+
+    const result = (beerCompared * sanitizedPrice) / beerInput;
+    return result.toFixed(2).toString();
   };
 
   const gridLayout = (
@@ -94,6 +97,7 @@ const Home = ({navigation}) => {
           <CardItem bordered>
             <Thumbnail square source={beer.image} />
             <Text style={{fontSize: 10}}>{beer.label}</Text>
+            <Text>{calculator(price, value, beer.value)} </Text>
           </CardItem>
         </Card>
       ))}
@@ -127,8 +131,10 @@ const Home = ({navigation}) => {
   );
   return (
     <View style={{flex: 1, backgroundColor: 'white', margin: 10}}>
-      <View style={{backgroundColor: '#BBB', padding: 5}}>
-        <Text style={{color: '#FFF'}}>ESCOLHA A CERVEJA</Text>
+      <View style={{backgroundColor: '#ff0000', padding: 5}}>
+        <Text style={{color: '#FFF', fontWeight: 'bold'}}>
+          ESCOLHA A CERVEJA
+        </Text>
       </View>
       <View style={{backgroundColor: '#FFF'}}>
         <Form>
@@ -153,14 +159,19 @@ const Home = ({navigation}) => {
           </Item>
         </Form>
       </View>
-      <View style={{backgroundColor: '#BBB', padding: 5}}>
-        <Text style={{color: '#FFF'}}>DIGITE O VALOR</Text>
+      <View style={{backgroundColor: '#FF0000', padding: 5}}>
+        <Text style={{color: '#FFF', fontWeight: 'bold'}}>DIGITE O VALOR</Text>
       </View>
       <View style={{backgroundColor: '#FFF', marginBottom: 5, marginTop: 5}}>
         <Form>
           <Item>
             <Icon active name="ios-beer" />
-            <Input onChangeText={setPrice} placeholder="R$ 0,00" />
+            <TextInputMask
+              type={'money'}
+              value={price}
+              onChangeText={(text) => setPrice(text)}
+              placeholder={'R$0,00'}
+            />
           </Item>
         </Form>
       </View>
