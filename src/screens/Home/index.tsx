@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useLayoutEffect} from 'react';
 
 import {
   Form,
@@ -16,9 +16,6 @@ import {
   Button,
   Card,
   CardItem,
-  Grid,
-  Row,
-  Col,
 } from 'native-base';
 
 import {View, ScrollView} from 'react-native';
@@ -39,10 +36,28 @@ import volume550 from '../../assets/550.jpg';
 import volume600 from '../../assets/600.jpg';
 import volume1000 from '../../assets/1000.jpg';
 
-const Home = () => {
+const Home = ({navigation}) => {
   const [value, setValue] = useState('');
   const [price, setPrice] = useState('');
   const [displayGrid, setDisplayGrid] = useState(true);
+
+  const buttonName = displayGrid ? 'md-grid' : 'md-list';
+  console.log('displayGrid', displayGrid);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View>
+          <Button
+            transparent
+            iconRight
+            onPress={() => setDisplayGrid(!displayGrid)}>
+            <Icon name={buttonName} />
+          </Button>
+        </View>
+      ),
+    });
+  }, [navigation, setDisplayGrid, buttonName, displayGrid]);
 
   const beerList: {}[] = [
     {label: 'Latinha 269ml', value: 269, image: volume269},
@@ -63,9 +78,6 @@ const Home = () => {
     beerNumerator,
     beerDenominator,
   }: calculatorProps) => {
-    console.log('beerPrice', beerPrice);
-    console.log('beerNumerator', beerNumerator);
-    console.log('beerDenominator', beerDenominator);
     const result = (beerPrice * beerDenominator) / beerNumerator;
     return String(result);
   };
@@ -75,28 +87,16 @@ const Home = () => {
       contentContainerStyle={{
         flexWrap: 'wrap',
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
       }}>
-      <Card style={{width: '40%', borderRadius: 5}}>
-        <CardItem>
-          <Text>123</Text>
-        </CardItem>
-      </Card>
-      <Card style={{width: '40%', borderRadius: 5}}>
-        <CardItem>
-          <Text>123</Text>
-        </CardItem>
-      </Card>
-      <Card style={{width: '40%', borderRadius: 5}}>
-        <CardItem>
-          <Text>123</Text>
-        </CardItem>
-      </Card>
-      <Card style={{width: '40%', borderRadius: 5}}>
-        <CardItem>
-          <Text>123</Text>
-        </CardItem>
-      </Card>
+      {beerList.map((beer, index) => (
+        <Card key={index} style={{width: '47%', borderRadius: 5}}>
+          <CardItem bordered>
+            <Thumbnail square source={beer.image} />
+            <Text style={{fontSize: 10}}>{beer.label}</Text>
+          </CardItem>
+        </Card>
+      ))}
     </ScrollView>
   );
 
@@ -104,7 +104,7 @@ const Home = () => {
     <ScrollView>
       <List>
         {beerList.map((beer, index) => (
-          <ListItem thumbnail>
+          <ListItem key={index} thumbnail>
             <Left>
               <Thumbnail square source={beer.image} />
             </Left>
@@ -127,7 +127,9 @@ const Home = () => {
   );
   return (
     <View style={{flex: 1, backgroundColor: 'white', margin: 10}}>
-      <StyledText text="ESCOLHA A CERVEJA" />
+      <View style={{backgroundColor: '#BBB', padding: 5}}>
+        <Text style={{color: '#FFF'}}>ESCOLHA A CERVEJA</Text>
+      </View>
       <View style={{backgroundColor: '#FFF'}}>
         <Form>
           <Item picker>
@@ -141,18 +143,24 @@ const Home = () => {
               selectedValue={value}
               onValueChange={setValue}>
               {beerList.map((beer, index) => (
-                <Picker.Item label={beer.label} value={beer.value} />
+                <Picker.Item
+                  key={index}
+                  label={beer.label}
+                  value={beer.value}
+                />
               ))}
             </Picker>
           </Item>
         </Form>
       </View>
-      <StyledText text="DIGITE O VALOR" />
-      <View style={{backgroundColor: '#E3e3e3'}}>
+      <View style={{backgroundColor: '#BBB', padding: 5}}>
+        <Text style={{color: '#FFF'}}>DIGITE O VALOR</Text>
+      </View>
+      <View style={{backgroundColor: '#FFF', marginBottom: 5, marginTop: 5}}>
         <Form>
           <Item>
-            <Icon active name="home" />
-            <Input onChangeText={setPrice} placeholder="Icon Textbox" />
+            <Icon active name="ios-beer" />
+            <Input onChangeText={setPrice} placeholder="R$ 0,00" />
           </Item>
         </Form>
       </View>
