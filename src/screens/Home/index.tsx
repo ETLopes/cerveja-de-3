@@ -14,6 +14,11 @@ import {
   Body,
   Right,
   Button,
+  Card,
+  CardItem,
+  Grid,
+  Row,
+  Col,
 } from 'native-base';
 
 import {View, ScrollView} from 'react-native';
@@ -37,6 +42,7 @@ import volume1000 from '../../assets/1000.jpg';
 const Home = () => {
   const [value, setValue] = useState('');
   const [price, setPrice] = useState('');
+  const [displayGrid, setDisplayGrid] = useState(true);
 
   const beerList: {}[] = [
     {label: 'Latinha 269ml', value: 269, image: volume269},
@@ -63,10 +69,66 @@ const Home = () => {
     const result = (beerPrice * beerDenominator) / beerNumerator;
     return String(result);
   };
+
+  const gridLayout = (
+    <ScrollView
+      contentContainerStyle={{
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+      }}>
+      <Card style={{width: '40%', borderRadius: 5}}>
+        <CardItem>
+          <Text>123</Text>
+        </CardItem>
+      </Card>
+      <Card style={{width: '40%', borderRadius: 5}}>
+        <CardItem>
+          <Text>123</Text>
+        </CardItem>
+      </Card>
+      <Card style={{width: '40%', borderRadius: 5}}>
+        <CardItem>
+          <Text>123</Text>
+        </CardItem>
+      </Card>
+      <Card style={{width: '40%', borderRadius: 5}}>
+        <CardItem>
+          <Text>123</Text>
+        </CardItem>
+      </Card>
+    </ScrollView>
+  );
+
+  const listLayout = (
+    <ScrollView>
+      <List>
+        {beerList.map((beer, index) => (
+          <ListItem thumbnail>
+            <Left>
+              <Thumbnail square source={beer.image} />
+            </Left>
+            <Body>
+              <Text>{beer.label}</Text>
+              <Text>{index}</Text>
+              <Text note numberOfLines={1}>
+                123
+              </Text>
+            </Body>
+            <Right>
+              <Button transparent>
+                <Text>View</Text>
+              </Button>
+            </Right>
+          </ListItem>
+        ))}
+      </List>
+    </ScrollView>
+  );
   return (
     <View style={{flex: 1, backgroundColor: 'white', margin: 10}}>
       <StyledText text="ESCOLHA A CERVEJA" />
-      <View style={{backgroundColor: '#E3e3e3'}}>
+      <View style={{backgroundColor: '#FFF'}}>
         <Form>
           <Item picker>
             <Picker
@@ -94,28 +156,7 @@ const Home = () => {
           </Item>
         </Form>
       </View>
-      <ScrollView>
-        <List>
-          {beerList.map((beer, index) => (
-            <ListItem thumbnail>
-              <Left>
-                <Thumbnail square source={beer.image} />
-              </Left>
-              <Body>
-                <Text>{beer.label}</Text>
-                <Text note numberOfLines={1}>
-                  {calculator({10\, value, beer.value})}
-                </Text>
-              </Body>
-              <Right>
-                <Button transparent>
-                  <Text>View</Text>
-                </Button>
-              </Right>
-            </ListItem>
-          ))}
-        </List>
-      </ScrollView>
+      {displayGrid ? gridLayout : listLayout}
     </View>
   );
 };
