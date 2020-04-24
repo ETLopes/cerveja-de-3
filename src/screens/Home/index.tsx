@@ -7,7 +7,6 @@ import {
   Item,
   Picker,
   Icon,
-  Input,
   List,
   ListItem,
   Left,
@@ -39,8 +38,8 @@ import volume600 from '../../assets/600.jpg';
 import volume1000 from '../../assets/1000.jpg';
 
 const Home = ({navigation}) => {
-  const [value, setValue] = useState('');
-  const [price, setPrice] = useState('');
+  const [value, setValue] = useState(0);
+  const [price, setPrice] = useState(0);
   const [displayGrid, setDisplayGrid] = useState(true);
 
   const buttonName = displayGrid ? 'md-grid' : 'md-list';
@@ -78,11 +77,12 @@ const Home = ({navigation}) => {
     beerPrice: string,
     beerInput: number,
     beerCompared: number,
-  ): string => {
-    const sanitizedPrice = parseFloat(beerPrice.replace(/\D/g, ''));
-
-    const result = (beerCompared * sanitizedPrice) / beerInput;
-    return result.toFixed(2).toString();
+  ): number => {
+    const sanitizedPrice = parseInt(beerPrice.replace(/\D/g, ''), 10) / 100;
+    const result = parseFloat(
+      ((sanitizedPrice * beerCompared) / beerInput).toFixed(2),
+    );
+    return result;
   };
 
   const gridLayout = (
@@ -97,7 +97,7 @@ const Home = ({navigation}) => {
           <CardItem bordered>
             <Thumbnail square source={beer.image} />
             <Text style={{fontSize: 10}}>{beer.label}</Text>
-            <Text>{calculator(price, value, beer.value)} </Text>
+            <Text>{calculator(price, parseInt(value), beer.value)} </Text>
           </CardItem>
         </Card>
       ))}
@@ -162,7 +162,13 @@ const Home = ({navigation}) => {
       <View style={{backgroundColor: '#FF0000', padding: 5}}>
         <Text style={{color: '#FFF', fontWeight: 'bold'}}>DIGITE O VALOR</Text>
       </View>
-      <View style={{backgroundColor: '#FFF', marginBottom: 5, marginTop: 5}}>
+      <View
+        style={{
+          backgroundColor: '#FFF',
+          marginBottom: 5,
+          marginTop: 5,
+          borderColor: 'black',
+        }}>
         <Form>
           <Item>
             <Icon active name="ios-beer" />

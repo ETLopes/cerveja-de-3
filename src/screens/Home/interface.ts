@@ -3,3 +3,7 @@ export interface calculatorProps {
   beerNumerator: number;
   beerDenominator: number;
 }
+
+export interface beerPorps {
+  
+}
