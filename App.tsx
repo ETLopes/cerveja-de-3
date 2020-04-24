@@ -19,7 +19,6 @@ function App() {
             headerTitle: () => (
               <Text
                 style={{
-                  fontFamily: 'BrooklineCondensed',
                   fontWeight: 'bold',
                   fontSize: 18,
                 }}>

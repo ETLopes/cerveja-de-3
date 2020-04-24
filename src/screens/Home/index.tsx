@@ -78,11 +78,17 @@ const Home = ({navigation}) => {
     beerInput: number,
     beerCompared: number,
   ): number => {
-    const sanitizedPrice = parseInt(beerPrice.replace(/\D/g, ''), 10) / 100;
-    const result = parseFloat(
-      ((sanitizedPrice * beerCompared) / beerInput).toFixed(2),
-    );
-    return result;
+    if (beerPrice && beerInput && beerCompared) {
+      const sanitizedPrice = beerPrice
+        ? parseInt(beerPrice.replace(/\D/g, ''), 10) / 100
+        : 0;
+      const result = parseFloat(
+        ((sanitizedPrice * beerCompared) / beerInput).toFixed(2),
+      );
+      return result;
+    }
+
+    return 0;
   };
 
   const gridLayout = (
@@ -96,8 +102,12 @@ const Home = ({navigation}) => {
         <Card key={index} style={{width: '47%', borderRadius: 5}}>
           <CardItem bordered>
             <Thumbnail square source={beer.image} />
-            <Text style={{fontSize: 10}}>{beer.label}</Text>
-            <Text>{calculator(price, parseInt(value), beer.value)} </Text>
+            <Text
+              style={{fontSize: 10, flex: 1, flexWrap: 'wrap', paddingLeft: 5}}>
+              {beer.label}
+              {'\n'}
+              R$ {calculator(price, parseInt(value), beer.value)}
+            </Text>
           </CardItem>
         </Card>
       ))}
@@ -114,15 +124,14 @@ const Home = ({navigation}) => {
             </Left>
             <Body>
               <Text>{beer.label}</Text>
-              <Text>{index}</Text>
               <Text note numberOfLines={1}>
-                123
+                R$ {calculator(price, parseInt(value), beer.value)}
               </Text>
             </Body>
             <Right>
-              <Button transparent>
+              {/* <Button transparent>
                 <Text>View</Text>
-              </Button>
+              </Button> */}
             </Right>
           </ListItem>
         ))}
@@ -142,12 +151,12 @@ const Home = ({navigation}) => {
             <Picker
               mode="dropdown"
               iosIcon={<Icon name="arrow-down" />}
-              placeholder="Select your SIM"
+              placeholder="Escolha o tamanho"
               placeholderStyle={{color: '#bfc6ea'}}
               placeholderIconColor="#007aff"
-              style={{width: undefined}}
               selectedValue={value}
               onValueChange={setValue}>
+              <Picker.Item label={'Selectione um tamanho'} value={0} />
               {beerList.map((beer, index) => (
                 <Picker.Item
                   key={index}
@@ -171,13 +180,16 @@ const Home = ({navigation}) => {
         }}>
         <Form>
           <Item>
-            <Icon active name="ios-beer" />
-            <TextInputMask
-              type={'money'}
-              value={price}
-              onChangeText={(text) => setPrice(text)}
-              placeholder={'R$0,00'}
-            />
+            <Icon active name="md-cash" />
+            <View style={{width: '93%'}}>
+              <TextInputMask
+                type={'money'}
+                value={price}
+                onChangeText={(text) => setPrice(text)}
+                placeholder={'R$0,00'}
+                style={{fontSize: 17}}
+              />
+            </View>
           </Item>
         </Form>
       </View>
