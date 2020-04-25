@@ -1,6 +1,5 @@
 import React, {useState, useLayoutEffect} from 'react';
-
-import {TextInputMask} from 'react-native-masked-text';
+import {View, ScrollView} from 'react-native';
 
 import {
   Form,
@@ -19,28 +18,30 @@ import {
   CardItem,
 } from 'native-base';
 
-import {View, ScrollView} from 'react-native';
+import {TextInputMask} from 'react-native-masked-text';
 
-import StyledText from '../../components/Input';
+import beerList from './constants';
+import styles from './styles';
+import {NavigationStackProp} from 'react-navigation-stack';
 
-import {calculatorProps} from './interface';
+const {
+  gridCard,
+  gridCardText,
+  gridScrollView,
+  homeLayout,
+  labelDescription,
+  labelText,
+  pickerArea,
+  pickerPlaceholder,
+  priceInputArea,
+  priceInputText,
+  priceInputContainer,
+} = styles;
 
-import volume269 from '../../assets/269.jpg';
-import volume275 from '../../assets/275.jpeg';
-import volume300 from '../../assets/300.jpeg';
-import volume310 from '../../assets/310.jpg';
-import volume350 from '../../assets/350.png';
-import volume355 from '../../assets/355.jpg';
-import volume410 from '../../assets/410.jpg';
-import volume473 from '../../assets/473.jpg';
-import volume550 from '../../assets/550.jpg';
-import volume600 from '../../assets/600.jpg';
-import volume1000 from '../../assets/1000.jpg';
-
-const Home = ({navigation}) => {
-  const [value, setValue] = useState(0);
-  const [price, setPrice] = useState(0);
-  const [displayGrid, setDisplayGrid] = useState(true);
+const Home = ({navigation}: NavigationStackProp) => {
+  const [value, setValue] = useState<string>('');
+  const [price, setPrice] = useState<string>('');
+  const [displayGrid, setDisplayGrid] = useState<boolean>(true);
 
   const buttonName = displayGrid ? 'md-grid' : 'md-list';
 
@@ -59,54 +60,32 @@ const Home = ({navigation}) => {
     });
   }, [navigation, setDisplayGrid, buttonName, displayGrid]);
 
-  const beerList: {}[] = [
-    {label: 'Latinha 269ml', value: 269, image: volume269},
-    {label: 'Long Neck Stella 275ml', value: 275, image: volume275},
-    {label: 'Litrinho 300ml', value: 300, image: volume300},
-    {label: 'Lata Stella 310ml', value: 310, image: volume310},
-    {label: 'Lata 350ml', value: 350, image: volume350},
-    {label: 'Long Neck 355ml', value: 355, image: volume355},
-    {label: 'Latão Colorado 410ml', value: 410, image: volume410},
-    {label: 'Latão 473ml', value: 473, image: volume473},
-    {label: 'Garrafa Bud 550ml', value: 550, image: volume550},
-    {label: 'Garrafa 600ml', value: 600, image: volume600},
-    {label: 'Litrao 1000ml', value: 1000, image: volume1000},
-  ];
-
   const calculator = (
     beerPrice: string,
     beerInput: number,
     beerCompared: number,
-  ): number => {
+  ): string => {
     if (beerPrice && beerInput && beerCompared) {
       const sanitizedPrice = beerPrice
         ? parseInt(beerPrice.replace(/\D/g, ''), 10) / 100
         : 0;
-      const result = parseFloat(
-        ((sanitizedPrice * beerCompared) / beerInput).toFixed(2),
-      );
+      const result = ((sanitizedPrice * beerCompared) / beerInput).toFixed(2);
       return result;
     }
 
-    return 0;
+    return '0.00';
   };
 
   const gridLayout = (
-    <ScrollView
-      contentContainerStyle={{
-        flexWrap: 'wrap',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-      }}>
+    <ScrollView contentContainerStyle={gridScrollView}>
       {beerList.map((beer, index) => (
-        <Card key={index} style={{width: '47%', borderRadius: 5}}>
+        <Card key={index} style={gridCard}>
           <CardItem bordered>
             <Thumbnail square source={beer.image} />
-            <Text
-              style={{fontSize: 10, flex: 1, flexWrap: 'wrap', paddingLeft: 5}}>
+            <Text style={gridCardText}>
               {beer.label}
               {'\n'}
-              R$ {calculator(price, parseInt(value), beer.value)}
+              R$ {calculator(price, parseInt(value, 10), beer.value)}
             </Text>
           </CardItem>
         </Card>
@@ -125,7 +104,7 @@ const Home = ({navigation}) => {
             <Body>
               <Text>{beer.label}</Text>
               <Text note numberOfLines={1}>
-                R$ {calculator(price, parseInt(value), beer.value)}
+                R$ {calculator(price, parseInt(value, 10), beer.value)}
               </Text>
             </Body>
             <Right>
@@ -138,21 +117,20 @@ const Home = ({navigation}) => {
       </List>
     </ScrollView>
   );
-  return (
-    <View style={{flex: 1, backgroundColor: 'white', margin: 10}}>
-      <View style={{backgroundColor: '#ff0000', padding: 5}}>
-        <Text style={{color: '#FFF', fontWeight: 'bold'}}>
-          ESCOLHA A CERVEJA
-        </Text>
+
+  const picker = (
+    <>
+      <View style={labelDescription}>
+        <Text style={labelText}>ESCOLHA A CERVEJA</Text>
       </View>
-      <View style={{backgroundColor: '#FFF'}}>
+      <View style={pickerArea}>
         <Form>
           <Item picker>
             <Picker
               mode="dropdown"
               iosIcon={<Icon name="arrow-down" />}
               placeholder="Escolha o tamanho"
-              placeholderStyle={{color: '#bfc6ea'}}
+              placeholderStyle={pickerPlaceholder}
               placeholderIconColor="#007aff"
               selectedValue={value}
               onValueChange={setValue}>
@@ -168,31 +146,37 @@ const Home = ({navigation}) => {
           </Item>
         </Form>
       </View>
-      <View style={{backgroundColor: '#FF0000', padding: 5}}>
-        <Text style={{color: '#FFF', fontWeight: 'bold'}}>DIGITE O VALOR</Text>
+    </>
+  );
+
+  const priceInput = (
+    <>
+      <View style={labelDescription}>
+        <Text style={labelText}>DIGITE O VALOR</Text>
       </View>
-      <View
-        style={{
-          backgroundColor: '#FFF',
-          marginBottom: 5,
-          marginTop: 5,
-          borderColor: 'black',
-        }}>
+      <View style={priceInputArea}>
         <Form>
           <Item>
             <Icon active name="md-cash" />
-            <View style={{width: '93%'}}>
+            <View style={priceInputContainer}>
               <TextInputMask
                 type={'money'}
                 value={price}
                 onChangeText={(text) => setPrice(text)}
                 placeholder={'R$0,00'}
-                style={{fontSize: 17}}
+                style={priceInputText}
               />
             </View>
           </Item>
         </Form>
       </View>
+    </>
+  );
+
+  return (
+    <View style={homeLayout}>
+      {picker}
+      {priceInput}
       {displayGrid ? gridLayout : listLayout}
     </View>
   );

@@ -3,8 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import Home from './src/screens/Home';
-import {Text, View} from 'react-native';
-import {Button, Icon} from 'native-base';
+import {Text} from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -15,7 +14,7 @@ function App() {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={({navigation, route}) => ({
+          options={() => ({
             headerTitle: () => (
               <Text
                 style={{
@@ -24,13 +23,6 @@ function App() {
                 }}>
                 Cerveja de 3
               </Text>
-            ),
-            headerRight: () => (
-              <View style={{marginRight: 0}}>
-                <Button transparent iconRight>
-                  <Icon name="ios-list" />
-                </Button>
-              </View>
             ),
           })}
         />

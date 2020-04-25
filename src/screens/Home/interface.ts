@@ -4,6 +4,8 @@ export interface calculatorProps {
   beerDenominator: number;
 }
 
-export interface beerPorps {
-  
+export interface beerProps {
+  label: string;
+  value: number;
+  image: any;
 }
