@@ -14,20 +14,17 @@ import {
   Body,
   Right,
   Button,
-  Card,
-  CardItem,
 } from 'native-base';
 
 import {TextInputMask} from 'react-native-masked-text';
 
-import beerList from './constants';
+import Grid from '../../components/grid';
+import ListView from '../../components/list';
+
 import styles from './styles';
 import {NavigationStackProp} from 'react-navigation-stack';
 
 const {
-  gridCard,
-  gridCardText,
-  gridScrollView,
   homeLayout,
   labelDescription,
   labelText,
@@ -37,6 +34,8 @@ const {
   priceInputText,
   priceInputContainer,
 } = styles;
+
+import beerList from '../../constants';
 
 const Home = ({navigation}: NavigationStackProp) => {
   const [value, setValue] = useState<string>('');
@@ -75,48 +74,6 @@ const Home = ({navigation}: NavigationStackProp) => {
 
     return '0.00';
   };
-
-  const gridLayout = (
-    <ScrollView contentContainerStyle={gridScrollView}>
-      {beerList.map((beer, index) => (
-        <Card key={index} style={gridCard}>
-          <CardItem bordered>
-            <Thumbnail square source={beer.image} />
-            <Text style={gridCardText}>
-              {beer.label}
-              {'\n'}
-              R$ {calculator(price, parseInt(value, 10), beer.value)}
-            </Text>
-          </CardItem>
-        </Card>
-      ))}
-    </ScrollView>
-  );
-
-  const listLayout = (
-    <ScrollView>
-      <List>
-        {beerList.map((beer, index) => (
-          <ListItem key={index} thumbnail>
-            <Left>
-              <Thumbnail square source={beer.image} />
-            </Left>
-            <Body>
-              <Text>{beer.label}</Text>
-              <Text note numberOfLines={1}>
-                R$ {calculator(price, parseInt(value, 10), beer.value)}
-              </Text>
-            </Body>
-            <Right>
-              {/* <Button transparent>
-                <Text>View</Text>
-              </Button> */}
-            </Right>
-          </ListItem>
-        ))}
-      </List>
-    </ScrollView>
-  );
 
   const picker = (
     <>
@@ -172,12 +129,15 @@ const Home = ({navigation}: NavigationStackProp) => {
       </View>
     </>
   );
-
   return (
     <View style={homeLayout}>
       {picker}
       {priceInput}
-      {displayGrid ? gridLayout : listLayout}
+      {displayGrid ? (
+        <Grid beerList={beerList} beerPrice={price} beerVolume={value} />
+      ) : (
+        <ListView beerList={beerList} beerPrice={price} beerVolume={value} />
+      )}
     </View>
   );
 };
