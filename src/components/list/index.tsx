@@ -4,10 +4,9 @@ import {Thumbnail, List, ListItem, Left, Body, Right} from 'native-base';
 
 import {beerProps} from 'src/constants/interface';
 
-import styles from '../../styles';
 import calculator from '../../utils';
 
-const ListView = ({beerList, beerPrice, beerVolume}) => {
+const ListView = ({beerList, beerPrice, beerVolume}: beerProps) => {
   return (
     <ScrollView>
       <List>

@@ -1,20 +1,7 @@
 import React, {useState, useLayoutEffect} from 'react';
-import {View, ScrollView} from 'react-native';
+import {View} from 'react-native';
 
-import {
-  Form,
-  Item,
-  Picker,
-  Icon,
-  List,
-  ListItem,
-  Left,
-  Thumbnail,
-  Text,
-  Body,
-  Right,
-  Button,
-} from 'native-base';
+import {Form, Item, Picker, Icon, Text, Button} from 'native-base';
 
 import {TextInputMask} from 'react-native-masked-text';
 
@@ -28,14 +15,13 @@ const {
   homeLayout,
   labelDescription,
   labelText,
-  pickerArea,
-  pickerPlaceholder,
   priceInputArea,
   priceInputText,
   priceInputContainer,
 } = styles;
 
 import beerList from '../../constants';
+import CustomPicker from 'src/components/picker';
 
 const Home = ({navigation}: NavigationStackProp) => {
   const [value, setValue] = useState<string>('');
@@ -58,53 +44,6 @@ const Home = ({navigation}: NavigationStackProp) => {
       ),
     });
   }, [navigation, setDisplayGrid, buttonName, displayGrid]);
-
-  const calculator = (
-    beerPrice: string,
-    beerInput: number,
-    beerCompared: number,
-  ): string => {
-    if (beerPrice && beerInput && beerCompared) {
-      const sanitizedPrice = beerPrice
-        ? parseInt(beerPrice.replace(/\D/g, ''), 10) / 100
-        : 0;
-      const result = ((sanitizedPrice * beerCompared) / beerInput).toFixed(2);
-      return result;
-    }
-
-    return '0.00';
-  };
-
-  const picker = (
-    <>
-      <View style={labelDescription}>
-        <Text style={labelText}>ESCOLHA A CERVEJA</Text>
-      </View>
-      <View style={pickerArea}>
-        <Form>
-          <Item picker>
-            <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
-              placeholder="Escolha o tamanho"
-              placeholderStyle={pickerPlaceholder}
-              placeholderIconColor="#007aff"
-              selectedValue={value}
-              onValueChange={setValue}>
-              <Picker.Item label={'Selectione um tamanho'} value={0} />
-              {beerList.map((beer, index) => (
-                <Picker.Item
-                  key={index}
-                  label={beer.label}
-                  value={beer.value}
-                />
-              ))}
-            </Picker>
-          </Item>
-        </Form>
-      </View>
-    </>
-  );
 
   const priceInput = (
     <>
@@ -131,7 +70,7 @@ const Home = ({navigation}: NavigationStackProp) => {
   );
   return (
     <View style={homeLayout}>
-      {picker}
+      <CustomPicker beerList={beerList} value={value} onChange={setValue} />
       {priceInput}
       {displayGrid ? (
         <Grid beerList={beerList} beerPrice={price} beerVolume={value} />
