@@ -21,7 +21,7 @@ const {
 } = styles;
 
 import beerList from '../../constants';
-import CustomPicker from 'src/components/picker';
+import CustomPicker from '../../components/picker';
 
 const Home = ({navigation}: NavigationStackProp) => {
   const [value, setValue] = useState<string>('');
