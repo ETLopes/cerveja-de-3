@@ -1,7 +1,7 @@
 import React, {useState, useLayoutEffect} from 'react';
 import {View} from 'react-native';
 
-import {Form, Item, Picker, Icon, Text, Button} from 'native-base';
+import {Form, Item, Icon, Text, Button} from 'native-base';
 
 import {TextInputMask} from 'react-native-masked-text';
 
