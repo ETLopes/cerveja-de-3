@@ -1,5 +1,5 @@
 import React, {useState, useLayoutEffect} from 'react';
-import {View} from 'react-native';
+import {View, StatusBar} from 'react-native';
 
 import {Form, Item, Picker, Icon, Text, Button} from 'native-base';
 
@@ -70,6 +70,7 @@ const Home = ({navigation}: NavigationStackProp) => {
   );
   return (
     <View style={homeLayout}>
+      <StatusBar barStyle="light-content" backgroundColor="#272C33" />
       <CustomPicker beerList={beerList} value={value} onChange={setValue} />
       {priceInput}
       {displayGrid ? (
