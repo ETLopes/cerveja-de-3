@@ -7,11 +7,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  gridCardText: {
-    fontSize: 10,
+  gridCardTextTitle: {
+    fontSize: 14,
     flex: 1,
     flexWrap: 'wrap',
-    paddingLeft: 5,
+  },
+  gridCardTextValue: {
+    fontSize: 14,
+    flex: 1,
+    flexWrap: 'wrap',
+    fontWeight: 'bold',
   },
   homeLayout: {flex: 1, backgroundColor: 'white', margin: 10},
   labelDescription: {backgroundColor: '#ff0000', padding: 5},

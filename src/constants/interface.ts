@@ -1,5 +1,5 @@
 export interface beerProps {
-  beerList: Array<T>;
-  beerPrice: string;
-  beerVolume: any;
+  image: any;
+  label: string;
+  value: any;
 }
