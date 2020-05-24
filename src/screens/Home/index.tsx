@@ -1,15 +1,18 @@
 import React, {useState, useLayoutEffect} from 'react';
 import {View, StatusBar} from 'react-native';
 
-import {Form, Item, Picker, Icon, Text, Button} from 'native-base';
+import {Form, Item, Icon, Text, Button} from 'native-base';
 
 import {TextInputMask} from 'react-native-masked-text';
+
+import {NavigationStackProp} from 'react-navigation-stack';
+
+import AsyncStorage from '@react-native-community/async-storage';
 
 import Grid from '../../components/grid';
 import ListView from '../../components/list';
 
 import styles from './styles';
-import {NavigationStackProp} from 'react-navigation-stack';
 
 const {
   homeLayout,
@@ -27,6 +30,14 @@ const Home = ({navigation}: NavigationStackProp) => {
   const [value, setValue] = useState<string>('');
   const [price, setPrice] = useState<string>('');
   const [displayGrid, setDisplayGrid] = useState<boolean>(true);
+
+  const setTutorialCompleted = async () => {
+    try {
+      await AsyncStorage.setItem('tutorialCompleted', 'true');
+    } catch (e) {
+      // saving error
+    }
+  };
 
   const buttonName = displayGrid ? 'md-grid' : 'md-list';
 
