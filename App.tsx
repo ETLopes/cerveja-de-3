@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import Home from './src/screens/Home';
 import {Text} from 'react-native';
+import Catalog from './src/screens/Catalog';
 
 const Stack = createStackNavigator();
 
@@ -13,7 +14,7 @@ function App() {
       <Stack.Navigator>
         <Stack.Screen
           name="Home"
-          component={Home}
+          component={Catalog}
           options={() => ({
             headerTitle: () => (
               <Text
