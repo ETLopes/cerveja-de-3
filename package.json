@@ -30,7 +30,7 @@
     "react-native-screens": "^2.5.0",
     "react-native-splash-screen": "^3.2.0",
     "react-navigation-stack": "^2.3.13",
-    "styled-components": "^5.1.0"
+    "styled-components": "^5.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
