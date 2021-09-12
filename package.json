@@ -19,7 +19,7 @@
     "@react-native-community/masked-view": "^0.1.9",
     "@react-navigation/native": "^5.1.6",
     "@react-navigation/stack": "^5.2.11",
-    "native-base": "^2.13.12",
+    "native-base": "^3.0.0",
     "react": "16.11.0",
     "react-dom": "^16.13.1",
     "react-is": "^16.13.1",
